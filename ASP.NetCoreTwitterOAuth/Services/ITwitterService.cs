@@ -12,7 +12,6 @@ namespace ASP.NetCoreTwitterOAuth.Services
         ITwitterCredentials Credential();
         Task<string> GetTweetsJson(string screenName);
         Tweet CleanText(Tweet tweet);
-        Task<IOrderedEnumerable<Tweet>> GetTweetsAsync();
         Task<IOrderedEnumerable<ASP.NetCoreTwitterOAuth.Data.Tweet>> GetTweetsAsync(string screenName);
     }
 }

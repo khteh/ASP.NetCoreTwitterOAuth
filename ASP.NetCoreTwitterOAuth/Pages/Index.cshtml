@@ -10,15 +10,39 @@
         js.id = id;
         js.src = "https://platform.twitter.com/widgets.js";
         fjs.parentNode.insertBefore(js, fjs);
-
         t._e = [];
         t.ready = function (f) {
             t._e.push(f);
         };
-
         return t;
     }(document, "script", "twitter-wjs"));
 </script>
+<div class="row">
+    <form action="" method="post" enctype="multipart/form-data">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="TweetString"></label>
+                <input asp-for="TweetString" class="form-control"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Image"></label>
+                <input asp-for="Image" class="form-control" type="file" />
+            </div>
+        </div>
+        <div class="col-md-12">
+            @{
+                bool Disabled = false;
+                if (SignInManager.IsSignedIn(User) == false)
+                {
+                    Disabled = true;
+                }
+            }
+            <button type="submit" class="btn btn-success" disabled="@Disabled">Post</button>
+        </div>
+    </form>
+</div>
 <div class="row">
     <div class="col-md-2">
         <h2>CreatedAt</h2>
@@ -29,44 +53,26 @@
 </div>
 @if (SignInManager.IsSignedIn(User))
 {
-<div class="row">
-    @foreach (var tweet in Model.Tweets)
-    {
-        <div class="row">
-            <div class="col-md-2">
-                <span>@tweet.CreatedAt</span>
-            </div>
-            <div class="col-md-10">
-                <span>@tweet.Text</span>
-            </div>
-        </div>
-        @if (tweet.Entity != null && tweet.Entity.Media != null)
+    <div class="row">
+        @foreach (var tweet in Model.Tweets)
         {
-            @foreach (var media in tweet.Entity.Media)
-            {
-                <div class="row">
-                    <img src="@media.MediaUrl"/>
+            <div class="row">
+                <div class="col-md-2">
+                    <span>@tweet.CreatedAt</span>
                 </div>
+                <div class="col-md-10">
+                    <span>@tweet.Text</span>
+                </div>
+            </div>
+            @if (tweet.Entity != null && tweet.Entity.Media != null)
+            {
+                @foreach (var media in tweet.Entity.Media)
+                {
+                    <div class="row">
+                        <img src="@media.MediaUrl" />
+                    </div>
+                }
             }
         }
-    }
-</div>
-    <div class="row">
-        <div class="col-md-6"></div>
     </div>
-        <div class="row">
-            <div class="col-md-6">
-                <form action="" method="post" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label asp-for="TweetString"></label>
-                        <input asp-for="TweetString" class="form-control" value="I love @("@ASPNetCore"). Check it out!" />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Image"></label>
-                        <input asp-for="Image" class="form-control" type="file" />
-                    </div>
-                    <button type="submit" class="btn btn-success">Post</button>
-                </form>
-            </div>
-        </div>
-        }
+}

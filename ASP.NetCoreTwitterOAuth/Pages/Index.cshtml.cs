@@ -36,7 +36,6 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
             {
                 if (_user == null)
                     _user = Tweetinvi.User.GetAuthenticatedUser(_service.Credential());
-                //Tweets = await _service.GetTweetsAsync();
                 Tweets = await _service.GetTweetsAsync(_user.ScreenName);
                 return Page();
             } else
@@ -64,10 +63,7 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
                 routeValueParameters.Add("id", publishedTweet == null ? (Nullable<long>)null : publishedTweet.Id);
                 routeValueParameters.Add("actionPerformed", "Publish");
                 routeValueParameters.Add("success", success);
-                if (success)
-                    return await OnGetAsync();
-                else
-                    return RedirectToPage();
+                return RedirectToPage();
             } else
                 return RedirectToPage("/Account/Login");
         }
