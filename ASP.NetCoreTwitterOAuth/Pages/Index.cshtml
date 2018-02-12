@@ -29,6 +29,7 @@
 </div>
 @if (SignInManager.IsSignedIn(User))
 {
+<div class="row">
     @foreach (var tweet in Model.Tweets)
     {
         <div class="row">
@@ -40,4 +41,32 @@
             </div>
         </div>
     }
+</div>
+<div class="row">
+        <div class="col-md-6">
+            <form action="" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label asp-for="TweetString"></label>
+                    <input asp-for="TweetString" class="form-control" value="I love @("@TweetinviAPI"). Check it out!" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Image"></label>
+                    <input asp-for="Image" class="form-control" type="file"/>
+                </div>
+                @*<div class="form-group">
+            <label for="tweet">Tweet : </label>
+            <input type="text" class="form-control" name="tweet" id="tweet" value="I love @("@TweetinviAPI"). Check it out!" />
+        </div>
+        <div class="form-group">
+            <label for="tweet">Add image &hellip;</label>
+            <span class="input-group-btn">
+                <span class="btn btn-primary btn-file">
+                    <input type="file" name="file" id="file">
+                </span>
+            </span>
+        </div>*@
+                <button type="submit" class="btn btn-success">Post</button>
+            </form>
+        </div>
+</div>
 }

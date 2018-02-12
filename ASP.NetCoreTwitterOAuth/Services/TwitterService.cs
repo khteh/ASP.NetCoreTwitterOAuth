@@ -8,22 +8,26 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-
+using Tweetinvi.Models;
+using Tweetinvi;
 namespace ASP.NetCoreTwitterOAuth.Services
 {
     public class TwitterService : ITwitterService
     {
         private string _consumerKey, _consumerSecret, _accessToken, _accessTokenSecret;
+        private readonly ITwitterCredentials _credentials;
         private readonly List<string> _screenNames = new List<string>() {"bbcnews", "bbcbreaking", "bbcworld", "cnn", "reuters", "skynews", "washingtonpost", "ap", "guardian", "nytimes", "time"};
-        private readonly List<Tweet> _tweets;
+        private readonly List<ASP.NetCoreTwitterOAuth.Data.Tweet> _tweets;
         public TwitterService(string key, string secret, string token, string tokenSecret)
         {
-            _tweets = new List<Tweet>();
+            _tweets = new List<ASP.NetCoreTwitterOAuth.Data.Tweet>();
             _consumerKey = key;
             _consumerSecret = secret;
             _accessToken = token;
             _accessTokenSecret = tokenSecret;
+            _credentials = Auth.CreateCredentials(_consumerKey, _consumerSecret, _accessToken, _accessTokenSecret);
         }
+        public ITwitterCredentials Credential() => _credentials;
         public async Task<string> GetTweetsJson(string screenName)
         {
             // Oauth application keys
@@ -95,21 +99,32 @@ namespace ASP.NetCoreTwitterOAuth.Services
             StreamReader reader = new StreamReader(response.GetResponseStream());
             return await reader.ReadToEndAsync();
         }
-        public Tweet CleanText(Tweet tweet)
+        public ASP.NetCoreTwitterOAuth.Data.Tweet CleanText(ASP.NetCoreTwitterOAuth.Data.Tweet tweet)
         {
-            var cleanTweet = new Tweet();
+            var cleanTweet = new ASP.NetCoreTwitterOAuth.Data.Tweet();
             cleanTweet = tweet;
             cleanTweet.Text = tweet.Text.Split(new[] { "https" }, StringSplitOptions.None)[0];
             return cleanTweet;
         }
-        public async Task<IOrderedEnumerable<Tweet>> GetTweetsAsync()
+        public async Task<IOrderedEnumerable<ASP.NetCoreTwitterOAuth.Data.Tweet>> GetTweetsAsync()
         {
             foreach (var sn in _screenNames)
             {
                 string tweetsJson = await GetTweetsJson(sn);
-                Tweet tweet = JsonConvert.DeserializeObject<List<Tweet>>(tweetsJson).First();
-                _tweets.Add(CleanText(tweet));
+                List<ASP.NetCoreTwitterOAuth.Data.Tweet> tweets = JsonConvert.DeserializeObject<List<ASP.NetCoreTwitterOAuth.Data.Tweet>>(tweetsJson);
+                foreach (ASP.NetCoreTwitterOAuth.Data.Tweet tweet in tweets)
+                    if (tweet != null)
+                        _tweets.Add(CleanText(tweet));
             }
+            return _tweets.OrderByDescending(x => x.Id);
+        }
+        public async Task<IOrderedEnumerable<ASP.NetCoreTwitterOAuth.Data.Tweet>> GetTweetsAsync(string screenName)
+        {
+            string tweetsJson = await GetTweetsJson(screenName);
+            List<ASP.NetCoreTwitterOAuth.Data.Tweet> tweets = JsonConvert.DeserializeObject<List<ASP.NetCoreTwitterOAuth.Data.Tweet>>(tweetsJson);
+            foreach (ASP.NetCoreTwitterOAuth.Data.Tweet tweet in tweets)
+                if (tweet != null)
+                    _tweets.Add(CleanText(tweet));
             return _tweets.OrderByDescending(x => x.Id);
         }
     }
