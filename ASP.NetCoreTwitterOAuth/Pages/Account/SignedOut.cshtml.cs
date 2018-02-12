@@ -14,7 +14,6 @@ public class SignedOutModel : PageModel
             // Redirect to home page if the user is authenticated.
             return RedirectToPage("/Index");
         }
-
         return Page();
     }
 }
