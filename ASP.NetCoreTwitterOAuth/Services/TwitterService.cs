@@ -1,4 +1,5 @@
 ﻿using ASP.NetCoreTwitterOAuth.Data;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,14 +14,17 @@ namespace ASP.NetCoreTwitterOAuth.Services
     public class TwitterService : ITwitterService
     {
         private string _consumerKey, _consumerSecret, _accessToken, _accessTokenSecret;
+        private readonly List<string> _screenNames = new List<string>() {"bbcnews", "bbcbreaking", "bbcworld", "cnn", "reuters", "skynews", "washingtonpost", "ap", "guardian", "nytimes", "time"};
+        private readonly List<Tweet> _tweets;
         public TwitterService(string key, string secret, string token, string tokenSecret)
         {
+            _tweets = new List<Tweet>();
             _consumerKey = key;
             _consumerSecret = secret;
             _accessToken = token;
             _accessTokenSecret = tokenSecret;
         }
-        public string GetTweetsJson(string screenName)
+        public async Task<string> GetTweetsJson(string screenName)
         {
             // Oauth application keys
             var oauth_token = _accessToken;
@@ -63,10 +67,7 @@ namespace ASP.NetCoreTwitterOAuth.Services
 
             string oauth_signature;
             using (HMACSHA1 hasher = new HMACSHA1(ASCIIEncoding.ASCII.GetBytes(compositeKey)))
-            {
-                oauth_signature = Convert.ToBase64String(
-                    hasher.ComputeHash(ASCIIEncoding.ASCII.GetBytes(baseString)));
-            }
+                oauth_signature = Convert.ToBase64String(hasher.ComputeHash(ASCIIEncoding.ASCII.GetBytes(baseString)));
 
             // Create the request header
             var headerFormat = "OAuth oauth_nonce=\"{0}\", oauth_signature_method=\"{1}\", " +
@@ -83,18 +84,16 @@ namespace ASP.NetCoreTwitterOAuth.Services
                 Uri.EscapeDataString(oauth_signature),
                 Uri.EscapeDataString(oauth_version)
             );
-
             // Make the request
-            var postBody = "screen_name=" + Uri.EscapeDataString(screenName);//
+            var postBody = "screen_name=" + Uri.EscapeDataString(screenName);
             resource_url += "?" + postBody;
             var request = (HttpWebRequest)WebRequest.Create(resource_url);
             request.Headers["Authorization"] = authHeader;
             request.Method = "GET";
             request.ContentType = "application/x-www-form-urlencoded";
-
-            var response = request.GetResponseAsync().Result;
-            var responseData = new StreamReader(response.GetResponseStream()).ReadToEnd();
-            return responseData;
+            WebResponse response = await request.GetResponseAsync();
+            StreamReader reader = new StreamReader(response.GetResponseStream());
+            return await reader.ReadToEndAsync();
         }
         public Tweet CleanText(Tweet tweet)
         {
@@ -102,6 +101,16 @@ namespace ASP.NetCoreTwitterOAuth.Services
             cleanTweet = tweet;
             cleanTweet.Text = tweet.Text.Split(new[] { "https" }, StringSplitOptions.None)[0];
             return cleanTweet;
+        }
+        public async Task<IOrderedEnumerable<Tweet>> GetTweetsAsync()
+        {
+            foreach (var sn in _screenNames)
+            {
+                string tweetsJson = await GetTweetsJson(sn);
+                Tweet tweet = JsonConvert.DeserializeObject<List<Tweet>>(tweetsJson).First();
+                _tweets.Add(CleanText(tweet));
+            }
+            return _tweets.OrderByDescending(x => x.Id);
         }
     }
 }

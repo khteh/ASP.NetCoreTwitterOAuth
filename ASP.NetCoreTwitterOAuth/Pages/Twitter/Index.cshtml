@@ -1,58 +1,39 @@
 ﻿@page
-@using ASP.NetCoreTwitterOAuth.Data
-@model System.Collections.Generic.IEnumerable<ASP.NetCoreTwitterOAuth.Data.Tweet>
-<div id="tweets">
-    @Html.Partial("~/Pages/Partial/_Tweets.cshtml")
-</div>
-<script type="text/javascript">
-    window.setInterval(function() {
-        $.get('/Twitter/Partial', function (partialViewResult) {
-            $("#tweets").html(partialViewResult);
+@model ASP.NetCoreTwitterOAuth.Pages.Twitter.IndexModel
+<script>
+window.twttr = (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0],
+            t = window.twttr || {};
+        if (d.getElementById(id)) return t;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js, fjs);
 
-            var englishSelected = $('#english').attr('selected');
-            var norwegianSelected = $('#norwegian').attr('selected');
-            var arabicSelected = $('#arabic').attr('selected');
+        t._e = [];
+        t.ready = function (f) {
+            t._e.push(f);
+        };
 
-            if (typeof englishSelected !== typeof undefined && englishSelected !== false) {
-                //Hide non-english news
-                $("div[data-language]").each(function () {
-                    if ($(this).attr('data-language') !== "en") {
-                        $(this).hide();
-                    }
-                });
-
-                $("img[data-language]").each(function () {
-                    if ($(this).attr('data-language') !== "en") {
-                        $(this).hide();
-                    }
-                });
-            } else if (typeof norwegianSelected !== typeof undefined && norwegianSelected !== false) {
-                //Hide non-norwegian news
-                $("div[data-language]").each(function () {
-                    if ($(this).attr('data-language') !== "no") {
-                        $(this).hide();
-                    }
-                });
-
-                $("img[data-language]").each(function () {
-                    if ($(this).attr('data-language') !== "no") {
-                        $(this).hide();
-                    }
-                });
-            } else if (typeof arabicSelected !== typeof undefined && arabicSelected !== false) {
-                //Hide non-arabic news
-                $("div[data-language]").each(function () {
-                    if ($(this).attr('data-language') !== "ar") {
-                        $(this).hide();
-                    }
-                });
-
-                $("img[data-language]").each(function () {
-                    if ($(this).attr('data-language') !== "ar") {
-                        $(this).hide();
-                    }
-                });
-            }
-        });
-    }, 300000);
+        return t;
+    }(document, "script", "twitter-wjs"));
 </script>
+<div class="row">
+    <div class="col-md-2">
+        <h2>CreatedAt</h2>
+    </div>
+    <div class="col-md-10">
+        <h2>Text</h2>
+    </div>
+</div>
+    @foreach (var tweet in Model.Tweets)
+    {
+        <div class="row">
+            <div class="col-md-2">
+                <span>@tweet.CreatedAt</span>
+            </div>
+            <div class="col-md-10">
+                <span>@tweet.Text</span>
+            </div>
+        </div>
+    }

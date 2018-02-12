@@ -8,7 +8,8 @@ namespace ASP.NetCoreTwitterOAuth.Services
 {
     public interface ITwitterService
     {
-        string GetTweetsJson(string screenName);
+        Task<string> GetTweetsJson(string screenName);
         Tweet CleanText(Tweet tweet);
+        Task<IOrderedEnumerable<Tweet>> GetTweetsAsync();
     }
 }

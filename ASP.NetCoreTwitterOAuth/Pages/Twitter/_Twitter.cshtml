@@ -1,7 +1,6 @@
 ﻿@page
 @using ASP.NetCoreTwitterOAuth.Data
-@model System.Collections.Generic.IEnumerable<ASP.NetCoreTwitterOAuth.Data.Tweet>
-
+@model System.Linq.IOrderedEnumerable<ASP.NetCoreTwitterOAuth.Data.Tweet>
 @foreach (var tweet in Model)
 {
     if (tweet.Entity.Urls.Count > 0)
@@ -40,7 +39,6 @@
         }
     }
 }
-
 <script type="text/javascript">
         function speak(text) {
             if (window.speechSynthesis.paused) {
