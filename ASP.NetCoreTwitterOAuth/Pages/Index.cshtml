@@ -17,12 +17,13 @@
         return t;
     }(document, "script", "twitter-wjs"));
 </script>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <div class="row">
     <form action="" method="post" enctype="multipart/form-data">
         <div class="col-md-6">
             <div class="form-group">
                 <label asp-for="TweetString"></label>
-                <input asp-for="TweetString" class="form-control"/>
+                <input asp-for="TweetString" class="form-control" />
             </div>
         </div>
         <div class="col-md-6">
@@ -33,46 +34,23 @@
         </div>
         <div class="col-md-12">
             @{
-                bool Disabled = false;
-                if (SignInManager.IsSignedIn(User) == false)
-                {
-                    Disabled = true;
-                }
+                bool Disabled = !SignInManager.IsSignedIn(User);
             }
             <button type="submit" class="btn btn-success" disabled="@Disabled">Post</button>
         </div>
     </form>
 </div>
-<div class="row">
-    <div class="col-md-2">
-        <h2>CreatedAt</h2>
-    </div>
-    <div class="col-md-10">
-        <h2>Text</h2>
-    </div>
-</div>
 @if (SignInManager.IsSignedIn(User))
 {
-    <div class="row">
-        @foreach (var tweet in Model.Tweets)
-        {
-            <div class="row">
-                <div class="col-md-2">
-                    <span>@tweet.CreatedAt</span>
-                </div>
-                <div class="col-md-10">
-                    <span>@tweet.Text</span>
-                </div>
-            </div>
-            @if (tweet.Entity != null && tweet.Entity.Media != null)
-            {
-                @foreach (var media in tweet.Entity.Media)
-                {
-                    <div class="row">
-                        <img src="@media.MediaUrl" />
-                    </div>
-                }
-            }
-        }
-    </div>
+<div class="row">
+    @{
+        string url = $"https://twitter.com/{Model.ScreenName}";
+    }
+    <a class="twitter-timeline" href="@url">Tweets by @Model.ScreenName</a>
+    @*@foreach (string screenName in Model.Followed)
+    {
+        string followed = $"https://twitter.com/{screenName}";
+        <a class="twitter-timeline" href="@followed">Tweets followed by @Model.ScreenName</a>
+    }*@
+</div>
 }

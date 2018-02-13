@@ -25,6 +25,8 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
         public string TweetString { get; set; }
         [BindProperty]
         public IFormFile Image { get; set; }
+        public string ScreenName { get; set; }
+        public List<string> Followed { get; set; }
         public IndexModel(SignInManager<ApplicationUser> signInManager, ITwitterService service)
         {
             _signInManager = signInManager;
@@ -34,9 +36,8 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
         {
             if (_signInManager.IsSignedIn(User))
             {
-                if (_user == null)
-                    _user = Tweetinvi.User.GetAuthenticatedUser(_service.Credential());
-                Tweets = await _service.GetTweetsAsync(_user.ScreenName);
+                HandleAuthenticatedUser();
+                //Tweets = await _service.GetTweetsAsync(_user.ScreenName);
                 return Page();
             } else
                 return RedirectToPage("/Account/Login");
@@ -46,16 +47,13 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
             if (_signInManager.IsSignedIn(User))
             {
                 ITwitterCredentials cre = _service.Credential();
-                if (_user == null)
-                    _user = Tweetinvi.User.GetAuthenticatedUser(cre);
+                HandleAuthenticatedUser();
                 var fileBytes = GetByteArrayFromFile(Image);
                 var publishedTweet = Auth.ExecuteOperationWithCredentials(cre, () =>
                 {
                     var publishOptions = new PublishTweetOptionalParameters();
                     if (fileBytes != null)
-                    {
                         publishOptions.MediaBinaries.Add(fileBytes);
-                    }
                     return Tweetinvi.Tweet.PublishTweet(TweetString, publishOptions);
                 });
                 bool success = publishedTweet != null;
@@ -75,6 +73,15 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
             var memoryStream = new MemoryStream();
             file.OpenReadStream().CopyTo(memoryStream);
             return memoryStream.ToArray();
+        }
+        private void HandleAuthenticatedUser()
+        {
+            if (_user == null)
+            {
+                _user = Tweetinvi.User.GetAuthenticatedUser(_service.Credential());
+                ScreenName = _user.ScreenName;
+//                Followed = _user.GetFriends().Select(i => i.ScreenName).ToList();
+            }
         }
         #endregion
     }

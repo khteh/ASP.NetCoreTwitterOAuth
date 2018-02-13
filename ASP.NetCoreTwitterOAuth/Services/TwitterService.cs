@@ -47,7 +47,7 @@ namespace ASP.NetCoreTwitterOAuth.Services
             var oauth_timestamp = Convert.ToInt64(timeSpan.TotalSeconds).ToString();
 
             // Message api details    
-            var resource_url = "https://api.twitter.com/1.1/statuses/user_timeline.json";
+            var resource_url = "https://api.twitter.com/1.1/statuses/home_timeline.json";
 
             // Create oauth signature
             var baseFormat = "oauth_consumer_key={0}&oauth_nonce={1}&oauth_signature_method={2}" +
