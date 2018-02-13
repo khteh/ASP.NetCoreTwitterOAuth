@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ASP.NetCoreTwitterOAuth.Data;
 using ASP.NetCoreTwitterOAuth.Services;
+using Tweetinvi;
 
 namespace ASP.NetCoreTwitterOAuth
 {
@@ -41,10 +42,13 @@ namespace ASP.NetCoreTwitterOAuth
                     options.Conventions.AuthorizeFolder("/Account/Manage");
                     options.Conventions.AuthorizePage("/Account/Logout");
                 });
+#if false
             services.AddTransient<ITwitterService, TwitterService>((ctx) =>
             {
                 return new TwitterService(Configuration["Authentication:Twitter:ConsumerKey"], Configuration["Authentication:Twitter:ConsumerSecret"], Configuration["Authentication:Twitter.AccessToken"], Configuration["Authentication:Twitter.AccessTokenSecret"]);
             });
+#endif
+            Auth.SetUserCredentials(Configuration["Authentication:Twitter:ConsumerKey"], Configuration["Authentication:Twitter:ConsumerSecret"], Configuration["Authentication:Twitter.AccessToken"], Configuration["Authentication:Twitter.AccessTokenSecret"]);
             // Register no-op EmailSender used by account confirmation and password reset during development
             // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
             services.AddSingleton<IEmailSender, EmailSender>();
