@@ -48,14 +48,7 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
             if (_signInManager.IsSignedIn(User))
             {
                 HandleAuthenticatedUser();
-                var fileBytes = GetByteArrayFromFile(Image);
-                var publishedTweet = Auth.ExecuteOperationWithCredentials(_user.Credentials, () =>
-                {
-                    var publishOptions = new PublishTweetOptionalParameters();
-                    if (fileBytes != null)
-                        publishOptions.MediaBinaries.Add(fileBytes);
-                    return Tweetinvi.Tweet.PublishTweet(TweetString, publishOptions);
-                });
+                var publishedTweet = Auth.ExecuteOperationWithCredentials(_user.Credentials, PublishTweet);
                 bool success = publishedTweet != null;
                 var routeValueParameters = new Dictionary<string, object>();
                 routeValueParameters.Add("id", publishedTweet == null ? (Nullable<long>)null : publishedTweet.Id);
@@ -66,6 +59,14 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
                 return RedirectToPage("/Account/Login");
         }
         #region Private Functions
+        private ITweet PublishTweet()
+        {
+            var fileBytes = GetByteArrayFromFile(Image);
+            var publishOptions = new PublishTweetOptionalParameters();
+            if (fileBytes != null)
+                publishOptions.MediaBinaries.Add(fileBytes);
+            return Tweetinvi.Tweet.PublishTweet(TweetString, publishOptions);
+        }
         private byte[] GetByteArrayFromFile(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -78,7 +79,6 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
         {
             if (_user == null)
             {
-                //_user = Tweetinvi.User.GetAuthenticatedUser(_service.Credential());
                 _user = Tweetinvi.User.GetAuthenticatedUser();
                 ScreenName = _user.ScreenName;
                 Friends = _user.GetFriends().Select(i => i.ScreenName).ToList();
