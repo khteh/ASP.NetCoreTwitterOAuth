@@ -18,7 +18,7 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
     public class IndexModel : PageModel
     {
         private IAuthenticatedUser _user;
-        private ITwitterService _service;
+        //private ITwitterService _service;
         private SignInManager<ApplicationUser> _signInManager;
         public IOrderedEnumerable<ASP.NetCoreTwitterOAuth.Data.Tweet> Tweets { get; set; }
         [BindProperty]
@@ -26,11 +26,12 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
         [BindProperty]
         public IFormFile Image { get; set; }
         public string ScreenName { get; set; }
-        public List<string> Followed { get; set; }
-        public IndexModel(SignInManager<ApplicationUser> signInManager, ITwitterService service)
+        public List<string> Friends { get; set; }
+        //public IndexModel(SignInManager<ApplicationUser> signInManager, ITwitterService service)
+        public IndexModel(SignInManager<ApplicationUser> signInManager)
         {
             _signInManager = signInManager;
-            _service = service;
+            //_service = service;
         }
         public async Task<IActionResult> OnGetAsync()
         {
@@ -46,10 +47,9 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
         {
             if (_signInManager.IsSignedIn(User))
             {
-                ITwitterCredentials cre = _service.Credential();
                 HandleAuthenticatedUser();
                 var fileBytes = GetByteArrayFromFile(Image);
-                var publishedTweet = Auth.ExecuteOperationWithCredentials(cre, () =>
+                var publishedTweet = Auth.ExecuteOperationWithCredentials(_user.Credentials, () =>
                 {
                     var publishOptions = new PublishTweetOptionalParameters();
                     if (fileBytes != null)
@@ -78,9 +78,10 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
         {
             if (_user == null)
             {
-                _user = Tweetinvi.User.GetAuthenticatedUser(_service.Credential());
+                //_user = Tweetinvi.User.GetAuthenticatedUser(_service.Credential());
+                _user = Tweetinvi.User.GetAuthenticatedUser();
                 ScreenName = _user.ScreenName;
-//                Followed = _user.GetFriends().Select(i => i.ScreenName).ToList();
+                Friends = _user.GetFriends().Select(i => i.ScreenName).ToList();
             }
         }
         #endregion

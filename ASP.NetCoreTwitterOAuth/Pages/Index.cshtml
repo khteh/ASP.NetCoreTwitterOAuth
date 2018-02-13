@@ -47,10 +47,10 @@
         string url = $"https://twitter.com/{Model.ScreenName}";
     }
     <a class="twitter-timeline" href="@url">Tweets by @Model.ScreenName</a>
-    @*@foreach (string screenName in Model.Followed)
+    @foreach (string screenName in Model.Friends)
     {
         string followed = $"https://twitter.com/{screenName}";
         <a class="twitter-timeline" href="@followed">Tweets followed by @Model.ScreenName</a>
-    }*@
+    }
 </div>
 }

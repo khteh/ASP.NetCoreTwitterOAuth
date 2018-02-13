@@ -24,7 +24,7 @@ namespace ASP.NetCoreTwitterOAuth.Services
             _consumerSecret = secret;
             _accessToken = token;
             _accessTokenSecret = tokenSecret;
-            _credentials = Auth.CreateCredentials(_consumerKey, _consumerSecret, _accessToken, _accessTokenSecret);
+            _credentials = Auth.SetUserCredentials(_consumerKey, _consumerSecret, _accessToken, _accessTokenSecret);
         }
         public ITwitterCredentials Credential() => _credentials;
         public async Task<string> GetTweetsJson(string screenName)
