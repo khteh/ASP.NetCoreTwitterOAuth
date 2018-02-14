@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using ASP.NetCoreTwitterOAuth.Data;
+using Tweetinvi;
+using Tweetinvi.Models;
 using Microsoft.AspNetCore.Authentication;
 
 namespace ASP.NetCoreTwitterOAuth.Pages.Account
@@ -77,6 +79,13 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Account
             if (result.Succeeded)
             {
                 IEnumerable<Microsoft.AspNetCore.Authentication.AuthenticationToken> tokens = info.AuthenticationTokens;
+                if (Request.Query.ContainsKey("oauth_verifier") && Request.Query.ContainsKey("authorization_id"))
+                {
+                    string verifierCode = Request.Query["oauth_verifier"];
+                    string authorizationId = Request.Query["authorization_id"];
+                    ITwitterCredentials userCreds = AuthFlow.CreateCredentialsFromVerifierCode(verifierCode, authorizationId);
+                    IAuthenticatedUser user = Tweetinvi.User.GetAuthenticatedUser(userCreds);
+                }
                 _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
                 return LocalRedirect(Url.GetLocalUrl(returnUrl));
             }
