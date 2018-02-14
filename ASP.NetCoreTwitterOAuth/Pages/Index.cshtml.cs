@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using ASP.NetCoreTwitterOAuth.Data;
-using ASP.NetCoreTwitterOAuth.Services;
+﻿using ASP.NetCoreTwitterOAuth.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
@@ -47,13 +45,13 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
             if (_signInManager.IsSignedIn(User))
             {
                 HandleAuthenticatedUser();
-                var publishedTweet = Auth.ExecuteOperationWithCredentials(_user.Credentials, PublishTweet);
+                ITweet publishedTweet = Auth.ExecuteOperationWithCredentials(_user.Credentials, PublishTweet);
                 bool success = publishedTweet != null;
                 var routeValueParameters = new Dictionary<string, object>();
                 routeValueParameters.Add("id", publishedTweet == null ? (Nullable<long>)null : publishedTweet.Id);
                 routeValueParameters.Add("actionPerformed", "Publish");
                 routeValueParameters.Add("success", success);
-                return RedirectToPage();
+                return Page();
             }
             else
             {

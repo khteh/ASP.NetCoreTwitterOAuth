@@ -33,6 +33,7 @@ namespace ASP.NetCoreTwitterOAuth
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
             services.AddAuthentication().AddTwitter(i => {
+                i.RetrieveUserDetails = true;
                 i.ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"];
                 i.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
             });
