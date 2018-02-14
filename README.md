@@ -14,4 +14,4 @@ This application is using Twitter embedded timeline widget. It implements the fo
 Known Issues:
 
 * Posting tweet with large image will fail: https://github.com/linvi/tweetinvi/issues/648
-* Tweet like status is not updated in timeline: https://twittercommunity.com/t/profile-timeline-widget-does-not-show-the-like-status/101334
+* Tweet "like" status is not updated in timeline widget: https://twittercommunity.com/t/profile-timeline-widget-does-not-show-the-like-status/101334
