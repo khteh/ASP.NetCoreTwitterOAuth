@@ -18,8 +18,11 @@ Build Steps:
 * Enter the following values into the secret file:
 
     "Authentication:Twitter:ConsumerKey": "tgv8MPCvBb72k4K3wFrgTo3pF",
+
     "Authentication:Twitter:ConsumerSecret": "1DKBMZiKy0ZoF3hN2sGI2JJDOpZB59SsQN9IrPn6jC61Cm0ErD",
+
     "Authentication:Twitter.AccessToken": "961852359478427648-OMe0VMdVykHndwE1B4fs3NcWh8dScxP",
+
     "Authentication:Twitter.AccessTokenSecret": "RXLWMUiy2mHDt3UwGTxv6USjpvatZFdGNBdpYECuUmTpn"
 
 * Save the file
