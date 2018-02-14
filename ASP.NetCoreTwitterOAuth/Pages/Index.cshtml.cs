@@ -35,8 +35,12 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
                 HandleAuthenticatedUser();
                 //Tweets = await _service.GetTweetsAsync(_user.ScreenName);
                 return Page();
-            } else
+            }
+            else
+            {
+                _user = null;
                 return RedirectToPage("/Account/Login");
+            }
         }
         public async Task<IActionResult> OnPostAsync()
         {
@@ -50,8 +54,12 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
                 routeValueParameters.Add("actionPerformed", "Publish");
                 routeValueParameters.Add("success", success);
                 return RedirectToPage();
-            } else
+            }
+            else
+            {
+                _user = null;
                 return RedirectToPage("/Account/Login");
+            }
         }
         #region Private Functions
         private ITweet PublishTweet()

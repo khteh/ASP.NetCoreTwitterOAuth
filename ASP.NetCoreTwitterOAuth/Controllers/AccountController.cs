@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ASP.NetCoreTwitterOAuth.Data;
+using Tweetinvi;
 
 namespace ASP.NetCoreTwitterOAuth.Controllers
 {

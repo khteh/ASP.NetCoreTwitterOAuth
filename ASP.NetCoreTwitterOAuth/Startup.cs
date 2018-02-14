@@ -56,16 +56,10 @@ namespace ASP.NetCoreTwitterOAuth
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
-            }
-            else
-            {
+            } else
                 app.UseExceptionHandler("/Error");
-            }
-
             app.UseStaticFiles();
-
             app.UseAuthentication();
-
             app.UseMvc();
         }
     }
