@@ -1,23 +1,27 @@
 ﻿@page
 @inject SignInManager<ApplicationUser> SignInManager
 @model ASP.NetCoreTwitterOAuth.Pages.Twitter.IndexModel
-<script>
-    window.twttr = (function (d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0],
-            t = window.twttr || {};
-        if (d.getElementById(id)) return t;
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "https://platform.twitter.com/widgets.js";
-        fjs.parentNode.insertBefore(js, fjs);
-        t._e = [];
-        t.ready = function (f) {
-            t._e.push(f);
-        };
-        return t;
-    }(document, "script", "twitter-wjs"));
-</script>
+@*<script>
+        window.twttr = (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0],
+                t = window.twttr || {};
+            if (d.getElementById(id)) return t;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://platform.twitter.com/widgets.js";
+            fjs.parentNode.insertBefore(js, fjs);
+            t._e = [];
+            t.ready = function (f) {
+                t._e.push(f);
+            };
+            return t;
+        }(document, "script", "twitter-wjs"));
+    </script>*@
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+@*<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I love <a href="https://twitter.com/Twitter?ref_src=twsrc%5Etfw">@twitter</a></p>&mdash; Teh Kok How (@funcoolgeek) <a href="https://twitter.com/funcoolgeek/status/963651500097638400?ref_src=twsrc%5Etfw">February 14, 2018</a></blockquote>
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Hello World!!! <a href="https://twitter.com/helloworld?ref_src=twsrc%5Etfw">@HelloWorld</a> <a href="https://t.co/0pJzKWIJe3">pic.twitter.com/0pJzKWIJe3</a></p>&mdash; Teh Kok How (@funcoolgeek) <a href="https://twitter.com/funcoolgeek/status/963054042145480704?ref_src=twsrc%5Etfw">February 12, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>*@
 <div class="row">
     <form action="" method="post" enctype="multipart/form-data">
         <div class="col-md-6">
@@ -42,15 +46,15 @@
 </div>
 @if (SignInManager.IsSignedIn(User))
 {
-<div class="row">
-    @{
-        string url = $"https://twitter.com/{Model.ScreenName}";
-    }
-    <a class="twitter-timeline" href="@url">Tweets by @Model.ScreenName</a>
-    @foreach (string screenName in Model.Friends)
-    {
-        string followed = $"https://twitter.com/{screenName}";
-        <a class="twitter-timeline" href="@followed">Tweets followed by @Model.ScreenName</a>
-    }
-</div>
+    <div class="row">
+        @{
+            string url = $"https://twitter.com/{Model.ScreenName}?ref_src=twsrc%5Etfw";
+        }
+        <a class="twitter-timeline" href="@url">Tweets by @Model.ScreenName</a>
+        @foreach (string screenName in Model.Friends)
+        {
+            string followed = $"https://twitter.com/{screenName}?ref_src=twsrc%5Etfw";
+            <a class="twitter-timeline" href="@followed">Tweets followed by @Model.ScreenName</a>
+        }
+    </div>
 }

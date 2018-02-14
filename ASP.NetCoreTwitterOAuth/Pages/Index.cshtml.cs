@@ -18,7 +18,6 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
     public class IndexModel : PageModel
     {
         private IAuthenticatedUser _user;
-        //private ITwitterService _service;
         private SignInManager<ApplicationUser> _signInManager;
         public IOrderedEnumerable<ASP.NetCoreTwitterOAuth.Data.Tweet> Tweets { get; set; }
         [BindProperty]
@@ -28,11 +27,7 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Twitter
         public string ScreenName { get; set; }
         public List<string> Friends { get; set; }
         //public IndexModel(SignInManager<ApplicationUser> signInManager, ITwitterService service)
-        public IndexModel(SignInManager<ApplicationUser> signInManager)
-        {
-            _signInManager = signInManager;
-            //_service = service;
-        }
+        public IndexModel(SignInManager<ApplicationUser> signInManager) => _signInManager = signInManager;
         public async Task<IActionResult> OnGetAsync()
         {
             if (_signInManager.IsSignedIn(User))

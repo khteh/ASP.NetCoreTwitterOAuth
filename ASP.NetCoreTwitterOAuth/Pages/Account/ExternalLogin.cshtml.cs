@@ -70,9 +70,7 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Account
             }
             ExternalLoginInfo info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
-            {
                 return RedirectToPage("./Login");
-            }
 
             // Sign in the user with this external login provider if the user already has a login.
             Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor : true);
@@ -84,7 +82,7 @@ namespace ASP.NetCoreTwitterOAuth.Pages.Account
                     string verifierCode = Request.Query["oauth_verifier"];
                     string authorizationId = Request.Query["authorization_id"];
                     ITwitterCredentials userCreds = AuthFlow.CreateCredentialsFromVerifierCode(verifierCode, authorizationId);
-                    IAuthenticatedUser user = Tweetinvi.User.GetAuthenticatedUser(userCreds);
+                    Auth.SetCredentials(userCreds);
                 }
                 _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
                 return LocalRedirect(Url.GetLocalUrl(returnUrl));

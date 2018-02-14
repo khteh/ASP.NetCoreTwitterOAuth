@@ -12,7 +12,7 @@ namespace ASP.NetCoreTwitterOAuth.Pages
 
         public void OnGet()
         {
-            Message = "Your application description page.";
+            Message = "ASP.Net Core 2.0 Razor Application";
         }
     }
 }
