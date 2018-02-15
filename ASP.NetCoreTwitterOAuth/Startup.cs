@@ -12,6 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 using ASP.NetCoreTwitterOAuth.Data;
 using ASP.NetCoreTwitterOAuth.Services;
 using Tweetinvi;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Twitter;
+using Tweetinvi.Models;
 
 namespace ASP.NetCoreTwitterOAuth
 {
@@ -33,6 +36,10 @@ namespace ASP.NetCoreTwitterOAuth
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
             services.AddAuthentication().AddTwitter(i => {
+                i.Events = new Microsoft.AspNetCore.Authentication.Twitter.TwitterEvents() {
+                    //OnRedirectToAuthorizationEndpoint = TwitterRedirectToAuthorizationEndpointEventHandler, Redirection fails. Submitted a feedback to Microsoft.
+                    OnCreatingTicket = TwitterCreatingTicketEventHandler
+                };
                 i.RetrieveUserDetails = true;
                 i.ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"];
                 i.ConsumerSecret = Configuration["Authentication:Twitter:ConsumerSecret"];
@@ -48,7 +55,12 @@ namespace ASP.NetCoreTwitterOAuth
             // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
             services.AddSingleton<IEmailSender, EmailSender>();
         }
-
+        private async Task TwitterRedirectToAuthorizationEndpointEventHandler(RedirectContext<TwitterOptions> context)
+        {
+        }
+        private async Task TwitterCreatingTicketEventHandler(TwitterCreatingTicketContext context)
+        {
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
