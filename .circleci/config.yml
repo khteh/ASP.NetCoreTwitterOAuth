@@ -8,5 +8,7 @@ jobs:
       - run: dotnet restore
       - run: dotnet build
       - run: dotnet publish -c Release
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run: docker build -t khteh/twitteroauth.asp.netcore:latest .
       - run: docker push khteh/twitteroauth.asp.netcore:latest
