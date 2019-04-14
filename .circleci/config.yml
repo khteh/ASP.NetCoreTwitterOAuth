@@ -30,9 +30,7 @@ jobs:
       - run:
           name: Extract FileVersion from published binary
           command: |
-            pwd
-            ls -lRF
-            exiftool ASP.NetCoreTwitterOAuth/bin/Release/netcoreapp2.2/publish/ASP.NetCoreTwitterOAuth.dll | grep "File Version" | awk -F":" '{ print $2 }' | xargs echo -n > version.txt
+            exiftool ASP.NetCoreTwitterOAuth/bin/Release/netcoreapp2.2/ubuntu.18.10-x64/publish/ASP.NetCoreTwitterOAuth.dll | grep "File Version" | awk -F":" '{ print $2 }' | xargs echo -n > version.txt
       - run:
           name: Build & Push docker image
           command: |
