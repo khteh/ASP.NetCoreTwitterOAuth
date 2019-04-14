@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: /tmp
+    working_directory: ~/workspace
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:2.2
         restart: on-failure # Restart the container if it exits due to an error
