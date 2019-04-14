@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>aspnet-ASP.NetCoreTwitterOAuth-F43F8494-BF34-42A2-B215-4CAC7B2974A8</UserSecretsId>
-	<RuntimeIdentifiers>ubuntu.18.10-x64</RuntimeIdentifiers>
+	<!-- <RuntimeIdentifiers>ubuntu.18.10-x64</RuntimeIdentifiers> -->
 	<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
   </PropertyGroup>
   <ItemGroup>
