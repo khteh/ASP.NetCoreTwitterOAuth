@@ -25,7 +25,8 @@ jobs:
             mv /tmp/docker/* /usr/bin
       - run: 
           name: Install Python exiftool
-          command: apt install -y libimage-exiftool-perl
+          command: |
+            apt -y update && apt install -y libimage-exiftool-perl
       - run:
           name: Extract FileVersion from published binary
           command: |
