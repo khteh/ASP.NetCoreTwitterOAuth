@@ -1,14 +1,14 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/repo
+    working_directory: /tmp
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:2.2
         restart: on-failure # Restart the container if it exits due to an error
     steps:
       - checkout
       - run: dotnet restore
-      - run: dotnet build
+      - run: dotnet build -c Release --version-suffix $CIRCLE_BUILD_NUM --runtime ubuntu.18.10-x64
       - run: dotnet publish -c Release
       - setup_remote_docker:
           docker_layer_caching: true
@@ -22,6 +22,10 @@ jobs:
             curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             mv /tmp/docker/* /usr/bin
-      - run: docker build -t khteh/twitteroauth.asp.netcore:latest .
+      - run:
+          name: "Build & Push docker image"
+          command: |
+            VERSION=v$CIRCLE_BUILD_NUM
+            docker build -t khteh/twitteroauth.asp.netcore:latest .
       - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run: docker push khteh/twitteroauth.asp.netcore:latest
