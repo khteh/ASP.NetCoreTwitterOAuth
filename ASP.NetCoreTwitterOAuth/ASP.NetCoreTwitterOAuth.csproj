@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>aspnet-ASP.NetCoreTwitterOAuth-F43F8494-BF34-42A2-B215-4CAC7B2974A8</UserSecretsId>
 	<RuntimeIdentifiers>ubuntu.18.10-x64</RuntimeIdentifiers>
+	<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.2.4" />
