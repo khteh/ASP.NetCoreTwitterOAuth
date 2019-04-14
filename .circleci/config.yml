@@ -7,10 +7,10 @@ jobs:
         restart: on-failure # Restart the container if it exits due to an error
     steps:
       - checkout
-      - run: dotnet restore
+      - run: dotnet restore --runtime ubuntu.18.10-x64
       - run: dotnet build -c Release --version-suffix $CIRCLE_BUILD_NUM --runtime ubuntu.18.10-x64 --no-restore
-      - run: dotnet test -c Release
-      - run: dotnet publish -c Release --no-restore --no-build
+      - run: dotnet test -c Release --runtime ubuntu.18.10-x64
+      - run: dotnet publish -c Release --no-restore --no-build --runtime ubuntu.18.10-x64
       - setup_remote_docker:
           docker_layer_caching: true
       # use a primary image that already has Docker (recommended)
