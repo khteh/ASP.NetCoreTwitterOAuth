@@ -23,4 +23,5 @@ jobs:
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             mv /tmp/docker/* /usr/bin
       - run: docker build -t khteh/twitteroauth.asp.netcore:latest .
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run: docker push khteh/twitteroauth.asp.netcore:latest
