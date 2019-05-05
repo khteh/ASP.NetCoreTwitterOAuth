@@ -5,15 +5,6 @@ jobs:
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:2.2-bionic
     steps:
-      - checkout
-      - run: dotnet restore --runtime ubuntu.18.10-x64
-      - run: dotnet build -c Release --version-suffix $CIRCLE_BUILD_NUM --runtime ubuntu.18.10-x64 --no-restore
-      - run: dotnet test -c Release --runtime ubuntu.18.10-x64
-      - run: dotnet publish -c Release --no-restore --no-build --runtime ubuntu.18.10-x64
-      - setup_remote_docker:
-          docker_layer_caching: true
-      # use a primary image that already has Docker (recommended)
-      # or install it during a build like we do here
       - run:
           name: Install Docker client
           command: |
@@ -25,6 +16,15 @@ jobs:
           name: Install Python exiftool
           command: |
             apt -y update && apt install -y libimage-exiftool-perl
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - checkout
+      - run: dotnet restore --runtime ubuntu.18.10-x64
+      - run: dotnet build -c Release --version-suffix $CIRCLE_BUILD_NUM --runtime ubuntu.18.10-x64 --no-restore
+      - run: dotnet test -c Release --runtime ubuntu.18.10-x64
+      - run: dotnet publish -c Release --no-restore --no-build --runtime ubuntu.18.10-x64
+      # use a primary image that already has Docker (recommended)
+      # or install it during a build like we do here
       - run:
           name: Extract FileVersion from published binary
           command: |
