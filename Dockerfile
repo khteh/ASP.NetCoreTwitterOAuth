@@ -1,4 +1,6 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:latest
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2.4-stretch-slim
 MAINTAINER Kok How, Teh <funcoolgeek@gmail.com>
-ADD ASP.NetCoreTwitterOAuth/bin/Release/netcoreapp2.2/ubuntu.18.10-x64/publish/ app/
-ENTRYPOINT ["dotnet", "app/ASP.NetCoreTwitterOAuth.dll"]
+WORKDIR /app
+ADD ASP.NetCoreTwitterOAuth/bin/Release/netcoreapp2.2/ubuntu.18.10-x64/publish/ .
+EXPOSE 80 443
+ENTRYPOINT ["dotnet", "ASP.NetCoreTwitterOAuth.dll"]
