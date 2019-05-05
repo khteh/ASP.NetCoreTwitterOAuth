@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2.4-stretch-slim
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2.4-bionic
 MAINTAINER Kok How, Teh <funcoolgeek@gmail.com>
 RUN pwd
 RUN ls -l
