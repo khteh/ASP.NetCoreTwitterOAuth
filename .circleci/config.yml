@@ -36,7 +36,7 @@ jobs:
             MINOR=$(cat version.txt | awk -F"." '{ print $2 }')
             VERSION=$MAJOR.$MINOR.$CIRCLE_BUILD_NUM
             pwd
-            ls -lR
+            ls -l
             docker build -t khteh/twitteroauth.asp.netcore:latest -t khteh/twitteroauth.asp.netcore:$VERSION .
       - run:
           name: Login to docker hub
